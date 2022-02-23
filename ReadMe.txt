@@ -1,0 +1,1 @@
+Testing implementation of a twitch chat controlled vrc avatar utilizing https://docs.vrchat.com/v2022.1.1/docs/osc-overview
