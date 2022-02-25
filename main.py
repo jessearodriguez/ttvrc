@@ -98,6 +98,7 @@ def main():
                         msgcount += 1
 
                     fileopen.write(f"time:{datetime.now().time()} message: {msg} {extra}, username: {usrnm}\n")
+                    
                     thread = threading.Thread(target=Handle, args=[msg, time, extra, usrnm, msgcount])
                     thread.start()
 
@@ -118,9 +119,9 @@ def Handle(resp: str, time: int, extra, usrnm:str, msgcount:int):#why must switc
             client.send_message("/input/MoveForward",0)
 
         elif resp == "!back":
-            client.send_message("/input/MoveBack",1)
+            client.send_message("/input/MoveBackward",1)
             timer.sleep(time)
-            client.send_message("/input/MoveBack",0)
+            client.send_message("/input/MoveBackward",0)
 
         elif resp == "!mleft":
             client.send_message("/input/MoveLeft",1)
@@ -134,12 +135,12 @@ def Handle(resp: str, time: int, extra, usrnm:str, msgcount:int):#why must switc
 
         elif resp == "!lleft":
             client.send_message("/input/LookLeft",1)
-            timer.sleep(time)
+            timer.sleep(time/4)
             client.send_message("/input/LookLeft",0)
 
         elif resp == "!lright":
             client.send_message("/input/LookRight",1)
-            timer.sleep(time)
+            timer.sleep(time/4)
             client.send_message("/input/LookRight",0)
 
         elif resp == "!ldown": #these are inverted in game for some reason
