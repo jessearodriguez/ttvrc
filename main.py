@@ -6,7 +6,7 @@ from urllib import response
 
 
 import re
-
+from pynput import mouse, keyboard
 
 from pythonosc import dispatcher
 from pythonosc import udp_client
@@ -38,6 +38,9 @@ client = udp_client.SimpleUDPClient(ip, sendport)
 
 lock = threading.Lock()
 thread_numb = 0
+
+respawncd = timer.time()
+
 
 #engine = pyttsx3.init(driverName='sapi5')
 
@@ -111,7 +114,13 @@ def main():
 def Handle(resp: str, time: int, extra, usrnm:str, msgcount:int):#why must switches forsake me
 
         global thread_numb
+        global respawncd
+ 
+
+        mousectrl = mouse.Controller()
+        kbctrl = keyboard.Controller()
         
+
 
         if resp == "!forward":
             client.send_message("/input/MoveForward",1)
@@ -196,13 +205,34 @@ def Handle(resp: str, time: int, extra, usrnm:str, msgcount:int):#why must switc
                 newstr = newstr + extra[i] + " "
                 
             newstr = newstr.rstrip()
-
-
             
             while not ttslock.acquire():
                 timer.sleep(.1)
             ttsGenerator.generate_ttsmp3(text= newstr, usrnme=usrnm, num=msgcount)
             ttslock.release()
+
+        elif resp == "!respawn":
+            if timer.time() - respawncd > 30:
+                respawncd = timer.time()
+                mousectrl.position = (1000,800) #activate window if not activated
+                timer.sleep(.05)
+                mousectrl.press(mouse.Button.left)
+                timer.sleep(.05)
+                mousectrl.release(mouse.Button.left)
+                timer.sleep(.05)
+
+                
+
+                kbctrl.press(keyboard.Key.esc)
+                timer.sleep(.05)
+                kbctrl.release(keyboard.Key.esc)
+                timer.sleep(.05)
+                mousectrl.position = (1000,800)
+                timer.sleep(.05)
+                mousectrl.press(mouse.Button.left)
+                timer.sleep(.05)
+                mousectrl.release(mouse.Button.left)
+                timer.sleep(.05)
 
 
         
